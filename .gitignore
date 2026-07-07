@@ -6,5 +6,5 @@ log
 install
 build
 src
-scripts/launch/__pycache__
+*/__pycache__/*
 pixi.lock

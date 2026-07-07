@@ -1,5 +1,5 @@
 [project]
-name = "frankapy"
+name = "pixi_franka_crisp_ws"
 version = "0.0.1"
 description = "Python interface to control franka robots via teleoperation."
 readme = "README.md"
@@ -11,7 +11,7 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://git.ias.informatik.tu-darmstadt.de/ros2/franka/frankapy"
+Homepage = "https://github.com/DFKI-SAIROL/pixi_franka_crisp_ws"
 
 [tool.setuptools.packages.find]
 exclude = ["config", "examples", "build", "scripts", "media", "docs", "tests"]

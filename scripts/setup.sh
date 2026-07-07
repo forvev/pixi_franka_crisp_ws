@@ -34,13 +34,11 @@ sync_repo() {
     fi
 }
 
-# 1. CRISP Controllers
-sync_repo "https://github.com/utiasDSL/crisp_controllers.git" "crisp_controllers"
-
 # 2. Franka ROS 2
 if [ ! -d "franka_ros2" ]; then
     echo "Cloning franka_ros2 ($ROS_DISTRO)..."
     git clone -b "$ROS_DISTRO" https://github.com/frankarobotics/franka_ros2.git ./franka_ros2
+    git -C ./franka_ros2 checkout 7ed0458
     
     # Remove nodes not used in this pipeline
     rm -rf ./franka_ros2/franka_gazebo ./franka_ros2/franka_fr3_moveit_config ./franka_ros2/franka_mobile_example_controllers ./franka_ros2/franka_mobile_sensors ./franka_ros2/franka_gazebo_bringup
@@ -69,12 +67,19 @@ sync_repo "https://github.com/ROBOTIS-GIT/dynamixel_hardware_interface.git" "dyn
 sync_repo "https://github.com/ROBOTIS-GIT/DynamixelSDK.git" "DynamixelSDK" "$ROS_DISTRO"
 sync_repo "https://github.com/ROBOTIS-GIT/dynamixel_interfaces.git" "dynamixel_interfaces" "$ROS_DISTRO"
 
-# 4. CRISP Py & Gym
-sync_repo "https://github.com/utiasdsl/crisp_py.git" "crisp_py"
-sync_repo "https://github.com/utiasdsl/crisp_gym.git" "crisp_gym"
+# 4. CRISP components
+sync_repo "git@github.com:DFKI-SAIROL/crisp_py.git" "crisp_py"
+sync_repo "git@github.com:DFKI-SAIROL/crisp_gym.git" "crisp_gym"
+sync_repo "git@github.com:DFKI-SAIROL/crisp_controllers.git" "crisp_controllers"
 
-# TODO: change to the default branch once merged
-sync_repo "https://git.ias.informatik.tu-darmstadt.de/ros2/franka/frankapy" "franka_py" "feature/crisp"
+# 5. Misc
+sync_repo "git@github.com:DFKI-SAIROL/robot_ik_layer.git" "robot_ik_layer"
+sync_repo "git@github.com:DFKI-SAIROL/robot_safety_layer.git" "robot_safety_layer"
+sync_repo "git@github.com:DFKI-SAIROL/franka_robot_description.git" "franka_robot_description" "feature/gripper_rules"
+sync_repo "git@github.com:DFKI-SAIROL/franka_launch.git" "franka_launch" "feature/gripper_rules"
+sync_repo "git@github.com:DFKI-SAIROL/franka_py.git" "franka_py"
+sync_repo "git@github.com:DFKI-SAIROL/franka_data_collection.git" "franka_data_collection"
+sync_repo "git@github.com:DFKI-SAIROL/franka_custom_msgs.git" "franka_custom_msgs"
 
 # System tools
 if ! command -v scrcpy &> /dev/null || [ "$(scrcpy --version | head -n 1 | grep -o '1\.')" = "1." ]; then

@@ -7,7 +7,7 @@ authors = [
     "João Carvalho < joao@robot-learning.de>",
 ]
 channels = ["https://fast.prefix.dev/conda-forge"]
-name = "frankapy"
+name = "pixi_franka_crisp_ws"
 platforms = ["linux-64"]
 
 [activation]
@@ -26,19 +26,20 @@ pyqtgraph = ">=0.13.7,<0.14"
 libtmux = ">=0.46.2,<0.47"
 omegaconf = "*"
 git = "*"
+openssh = "*"
 
 [tasks]
-test_raw = "pytest --cov=frankapy --cov-report=html"
+test_raw = "pytest --cov-report=html"
 test = [{task="test_raw", environment="humble"}]
 setup = "bash scripts/setup.sh"
-build = "colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DBUILD_TESTING=OFF -DBUILD_TESTS=OFF -DBUILD_EXAMPLES=OFF"
+build = "colcon build --symlink-install --packages-skip franka_mobile --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DBUILD_TESTING=OFF -DBUILD_TESTS=OFF -DBUILD_EXAMPLES=OFF"
 clean = "rm -rf build install log"
 clean-build = [{ task = "clean" }, { task = "build" }]
 robot = "bash scripts/run_robot.sh"
 teleop = "bash scripts/run_teleop.sh"
 client = "bash scripts/run_client.sh"
 data-collection = "bash scripts/run_data_collection.sh"
-frankapy = { depends-on = ["robot", "teleop", "data-collection", "client"] }
+launch = { depends-on = ["robot", "teleop", "data-collection", "client"] }
 
 
 [target.linux.dependencies]
@@ -47,10 +48,10 @@ libcap = "*"
 poco = "*"
 
 [environments]
-humble = { features = ["humble", "frankapy", "extra", "dev"] }
-jazzy = { features = ["jazzy", "frankapy", "extra", "dev"] }
-humble-viser = { features = ["jazzy", "viser", "frankapy", "extra", "dev"] }
-jazzy-viser = { features = ["jazzy", "viser", "frankapy", "extra", "dev"] }
+humble = { features = ["humble", "franka", "extra", "dev"] }
+jazzy = { features = ["jazzy", "franka", "extra", "dev"] }
+humble-viser = { features = ["jazzy", "viser", "franka", "extra", "dev"] }
+jazzy-viser = { features = ["jazzy", "viser", "franka", "extra", "dev"] }
 humble-clean = { features = ["humble"] }
 
 # humble
@@ -104,11 +105,10 @@ twine = "*"
 pre-commit = "*"
 pytest = "*"  # for testing
 
-[feature.frankapy.pypi-dependencies]
-frankapy = { path = ".", editable = true }
-crisp-python = { path = "src/crisp_py", editable = true }
+[feature.franka.pypi-dependencies]
+crisp-python = { git = "https://github.com/DFKI-SAIROL/crisp_py.git" }
 
-[feature.frankapy.dependencies]
+[feature.franka.dependencies]
 pynput = ">=1.8.1,<2"
 grpcio = ">=1.67.1,<2"
 pyzmq = ">=27.0.0,<28"
@@ -118,7 +118,7 @@ transforms3d = ">=0.4.2,<0.5"
 [feature.extra.pypi-dependencies]
 rich = "*"  # For nice prints
 matplotlib = "*"  # to do some plots
+numpy = "*"
 
 [pypi-dependencies]
 yourdfpy = ">=0.0.58, <0.0.59"
-# crisp-python = { git = "https://github.com/DFKI-SAIROL/crisp_py.git" }
